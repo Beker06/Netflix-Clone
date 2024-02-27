@@ -1,5 +1,7 @@
+import axios from 'axios';
 import { useCallback, useState } from 'react';
 import { NextPageContext } from 'next';
+import { getSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Input from '@/components/Input';
 
@@ -16,13 +18,34 @@ const Auth = () => {
         setVariant((currentVariant) => currentVariant === 'login' ? 'register' : 'login');
     }, []);
 
-    const login = useCallback(() => {
-        console.log("login");
-    }, [])
+    const login = useCallback(async () => {
+        try {
+            await signIn('credentials', {
+                email,
+                password,
+                redirect: false,
+                callbackUrl: '/'
+            });
 
-    const register = useCallback(() => {
-        console.log("register")
-    }, [])
+            router.push('/profiles');
+        } catch (error) {
+            console.log(error);
+        }
+    }, [email, password, router]);
+
+    const register = useCallback(async () => {
+        try {
+            await axios.post('/api/register', {
+                email,
+                name,
+                password
+            });
+
+            login();
+        } catch (error) {
+            console.log(error);
+        }
+    }, [email, name, password, login]);
 
     return (
         <div className="relative h-full w-full bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
