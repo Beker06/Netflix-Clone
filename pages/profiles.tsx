@@ -1,3 +1,4 @@
+import useCurrentUser from "@/hooks/useCurrentUser";
 import { NextPageContext } from "next";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -48,7 +49,7 @@ const UserCard: React.FC<UserCardProps> = ({ name }) => {
 
 const App = () => {
     const router = useRouter();
-    // const { data: currentUser } = useCurrentUser();
+    const { data: currentUser } = useCurrentUser();
 
     const selectProfile = useCallback(() => {
         router.push('/');
@@ -60,7 +61,7 @@ const App = () => {
                 <h1 className="text-3xl md:text-6xl text-white text-center">Who&#39;s watching?</h1>
                 <div className="flex items-center justify-center gap-8 mt-10">
                     <div onClick={() => selectProfile()}>
-                        <UserCard name={'eliam'} />
+                        <UserCard name={currentUser?.name} />
                     </div>
                 </div>
             </div>
