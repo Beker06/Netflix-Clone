@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar';
 
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
-
+  console.log(session, 'No hay sesion')
   if (!session) {
     return {
       redirect: {
@@ -15,7 +15,6 @@ export async function getServerSideProps(context: NextPageContext) {
       }
     }
   }
-
   return {
     props: {}
   }
